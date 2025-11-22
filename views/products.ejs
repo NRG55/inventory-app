@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
 </head>  
-    <body>        
+    <body>
+        <a href="/products/new">+ Add a Product</a>
+        <h1><%= title %></h1>        
         <ul>
             <% products.forEach((product) => { %>
                 <li>
-                    <p>Product name: <%= product.name %></p>                   
+                    <a href="/products/<%=product.id%>">
+                        <p>Product name: <%= product.name %></p>
+                    </a>
                 </li>               
             <% }) %>
         </ul>        

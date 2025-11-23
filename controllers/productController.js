@@ -7,7 +7,7 @@ async function productsAllGet(req, res) {
 };
 
 async function addProductFormGet(req, res) { 
-    res.render("forms/product/addProductForm", { title: "Add a product" });
+    res.render("product_new", { title: "Add a product" });
 };
 
 async function addProductFormPost(req, res) {
@@ -21,7 +21,7 @@ async function editProductFormGet(req, res) {
     const id = req.params.id;
     const product = await db.getProductById(id);
 
-    res.render("forms/product/editProductForm", { title: "Edit product information", product: product });
+    res.render("product_edit", { title: "Edit product information", product: product });
 };
 
 async function editProductFormPost(req, res) {
@@ -36,7 +36,7 @@ async function productDetailsGet(req, res) {
     const id = req.params.id;
     const product = await db.getProductById(id);
 
-    res.render("productDetails", { product: product});    
+    res.render("product_details", { product: product});    
 };
 
 async function deleteProductPost(req, res) {

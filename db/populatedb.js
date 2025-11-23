@@ -11,7 +11,8 @@ const createProductsTable = `
 const createCategoriesTable = `
     CREATE TABLE IF NOT EXISTS categories (
                 id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-                name VARCHAR (20) NOT NULL UNIQUE    
+                name VARCHAR (40) NOT NULL UNIQUE,
+                description TEXT    
             );
     `;
 
@@ -23,10 +24,15 @@ const insertProductsData = `
     `;
 
 const insertCategoriesData = `
-    INSERT INTO categories (name)
-    VALUES  ('Category 1'),
-            ('Category 2'),
-            ('Category 3');    
+    INSERT INTO categories (name, description)
+    VALUES  ('Furniture', 'Living room seating, tables, chairs, beds, mattresses, and office furniture.'),
+            ('Kitchen', 'Cookware, bakeware, tableware, kitchen tools, and appliances like toasters and kettles.'),
+            ('Cleaning', 'Vacuum cleaners, cleaning supplies, laundry baskets, and accessories.'),
+            ('Outdoor', 'Outdoor furniture, plants, pots, and lawn and garden equipment.'),
+            ('Electronics', 'Small appliances, smart home devices, and other electronics. '),           
+            ('Textiles', 'Bedding, curtains, blinds, cushions, throws, rugs, and towels.'),
+            ('Decoration', 'Wall art, mirrors, statues, candles, artificial plants, and seasonal decor.'),
+            ('Lighting', 'Ambient lighting, outdoor lighting, lamps, and smart lighting.');    
     `;
 
 async function main() {

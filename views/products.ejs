@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css" type="text/css"/>
     <title><%= title %></title>
 </head>  
     <body>
+        <%- include("partials/navbar") %>
         <a href="/products/new">+ Add a Product</a>
         <h1><%= title %></h1>        
         <ul>
             <% products.forEach((product) => { %>
                 <li>
                     <a href="/products/<%=product.id%>">
-                        <p>Product name: <%= product.name %></p>
+                        <p><%= product.name %></p>
                     </a>
                 </li>               
             <% }) %>

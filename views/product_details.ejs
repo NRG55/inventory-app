@@ -3,10 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css" type="text/css"/>
     <title>Document</title>
 </head>
 <body>
-    <a href="/products"><< Back to products</a>
+    <%- include("partials/navbar") %>
     <h1><%= product.name %></h1>
     <form action="/products/edit/<%=product.id%>" method="GET">
         <button type="submit">Edit</button>        

@@ -3,12 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css" type="text/css"/>
     <title><%= title %></title>
 </head>  
     <body>
-        <a href="/products/">Back to products</a>
+        <%- include("partials/navbar") %>
         <h1><%= title %></h1> 
-        <form action="/products/new" method="POST">
+        <form action="/products/edit/<%= product.id %>" method="POST" >
             <div>
                 <label for="name">
                     Product name <span>*</span>
@@ -16,12 +17,13 @@
                 <input 
                     type="text" 
                     id="name" 
-                    name="name"                    
-                    placeholder="Enter product name"
+                    name="name"
+                    value="<%= product.name%>"
                     required
                 >
             </div>
-            <button type="submit">Add product</button>
+            <a href="/products/<%= product.id %>">Cancel</a>
+            <button type="submit">Update</button>
         </form>            
     </body>
 </html>

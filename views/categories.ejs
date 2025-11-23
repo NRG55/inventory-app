@@ -7,7 +7,7 @@
     <title><%= title %></title>
 </head>  
     <body>
-        <%- include("partials/navbar") %>        
+        <%- include("partials/header") %>        
         <ul>
             <% categories.forEach((category) => { %>
                 <li>
@@ -15,6 +15,7 @@
                     <p><%= category.description %></p>                   
                 </li>               
             <% }) %>
-        </ul>        
+        </ul>
+        <%- include("partials/footer") %>        
     </body>
 </html>

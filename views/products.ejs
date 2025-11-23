@@ -7,17 +7,20 @@
     <title><%= title %></title>
 </head>  
     <body>
-        <%- include("partials/navbar") %>
-        <a href="/products/new">+ Add a Product</a>
-        <h1><%= title %></h1>        
-        <ul>
-            <% products.forEach((product) => { %>
-                <li>
-                    <a href="/products/<%=product.id%>">
-                        <p><%= product.name %></p>
-                    </a>
-                </li>               
-            <% }) %>
-        </ul>        
+        <%- include("partials/header") %>
+        <main>
+            <a href="/products/new">+ Add a Product</a>
+            <h1><%= title %></h1>        
+            <ul>
+                <% products.forEach((product) => { %>
+                    <li>
+                        <a href="/products/<%=product.id%>">
+                            <p><%= product.name %></p>
+                        </a>
+                    </li>               
+                <% }) %>
+            </ul>   
+        </main>
+        <%- include("partials/footer") %>     
     </body>
 </html>

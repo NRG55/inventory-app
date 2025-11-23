@@ -2,9 +2,12 @@
     box-sizing: border-box;
 }
 
-body {  
+body {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows:auto 1fr auto;  
     margin: 0;
-    padding: 0;
+    padding: 0;    
 }
 
 a {
@@ -18,6 +21,18 @@ ul {
     padding: 0;
 }
 
+html {    
+    background: url("../images/background-image.jpg") no-repeat right bottom fixed; 
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+header {
+    min-height: 50px; 
+}
+
 .navbar {   
     display: flex;
     align-items: center;
@@ -27,4 +42,9 @@ ul {
 .navbar ul {   
     display: flex;
     gap: 2rem;
+}
+
+footer {
+    text-align: center;
+    min-height: 50px;
 }

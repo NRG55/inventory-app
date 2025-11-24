@@ -8,16 +8,26 @@
 </head>  
     <body>
         <%- include("partials/header") %>
-        <main>
-            <a href="/products/new">+ Add a Product</a>
-            <h1><%= title %></h1>        
-            <ul>
+        <main>                            
+            <ul class="products-list">
+                <a href="/products/new" class="add-product-link">Add Product</a> 
                 <% products.forEach((product) => { %>
-                    <li>
-                        <a href="/products/<%=product.id%>">
-                            <p><%= product.name %></p>
-                        </a>
-                    </li>               
+                    <a href="/products/<%=product.id%>">
+                        <li class="product">
+                            <div class="image-container">
+                                <img src="/images/product-1.webp">
+                            </div> 
+                            <div class="middle-div">
+                                <h2><%= product.name %></h2>                                
+                                <p>furniture</p>
+                                <h1>€<%= product.price %></h1>
+                            </div>                       
+                            <div class="right-div">
+                                <h4>Qty: <%= product.quantity %></h4>
+                                <p>SKU: <%= product.id %></p>
+                            </div>                        
+                        </li>
+                    </a>               
                 <% }) %>
             </ul>   
         </main>

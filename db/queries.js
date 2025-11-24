@@ -2,7 +2,15 @@ const pool = require("./pool");
 
 /*------------- PRODUCTS QUERIES ----------------*/
 const addProduct = async (product) => {
-    await pool.query(`INSERT INTO products (name) VALUES ($1)`, [product.name]);
+    await pool.query(`INSERT INTO products (name, description, price, quantity, category_id) VALUES ($1, $2, $3, $4, $5)`, 
+        [
+            product.name,
+            product.description,
+            product.price,
+            product.quantity,
+            product.category_id
+        ]
+    );
 };
 
 const getAllProducts = async () => {  

@@ -1,8 +1,13 @@
 const { Router } = require('express');
 const controller = require("../controllers/categoryController");
 
-const categoryRouter = Router();
+const router = Router();
 
-categoryRouter.get("/", controller.categoriesGet);
+router.get("/", controller.categoriesAllGet);
+router.get("/new", controller.addCategoryFormGet);
+router.post("/new", controller.addCategoryFormPost);
+router.get("/edit/:id", controller.editCategoryFormGet);
+router.post("/edit/:id", controller.editCategoryFormPost);
+router.post("/delete/:id", controller.deleteCategoryPost);
 
-module.exports = categoryRouter;
+module.exports = router;

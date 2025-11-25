@@ -9,7 +9,9 @@ const createProductsTable = `
                 description VARCHAR (200),
                 price DECIMAL(6, 2),
                 quantity INTEGER,
-                category_id INTEGER            
+                sku VARCHAR (20) NOT NULL UNIQUE,
+                category_id INTEGER,
+                image_src TEXT            
             );
     `;
 
@@ -25,12 +27,7 @@ const insertCategoriesData = `
     INSERT INTO categories (name, description)
     VALUES  ('Furniture', 'Living room seating, tables, chairs, beds, mattresses, and office furniture.'),
             ('Decoration', 'Wall art, mirrors, statues, candles, artificial plants, and seasonal decor.'),
-            ('Kitchen', 'Cookware, bakeware, tableware, kitchen tools, and appliances like toasters and kettles.'),
-            ('Cleaning', 'Vacuum cleaners, cleaning supplies, laundry baskets, and accessories.'),
-            ('Outdoor', 'Outdoor furniture, plants, pots, and lawn and garden equipment.'),
-            ('Electronics', 'Small appliances, smart home devices, and other electronics. '),           
-            ('Textiles', 'Bedding, curtains, blinds, cushions, throws, rugs, and towels.'),           
-            ('Lighting', 'Ambient lighting, outdoor lighting, lamps, and smart lighting.');    
+            ('Kitchen', 'Cookware, bakeware, tableware, kitchen tools, and appliances like toasters and kettles.');    
     `;
 
 const ownFetch = async (url, categoryId) => {
@@ -52,13 +49,15 @@ const insertProductsData = async () => {
     // results: {data: {}, categoryId: 1}, {data: {}, categoryId: 2}, ...
     results.forEach((result) => {
         result.data.products.forEach((product) => {
-                db.addProduct({   
-                                name: product.title, 
-                                description: product.description,
-                                price: product.price,
-                                quantity: product.stock,
-                                category_id: result.categoryId
-                            });                
+            db.addProduct({   
+                            name: product.title, 
+                            description: product.description,
+                            price: product.price,
+                            quantity: product.stock,
+                            sku: product.sku,
+                            category_id: result.categoryId,
+                            image_src: `/images/product-${product.sku}.webp`
+                        });                
         });        
     });
 };

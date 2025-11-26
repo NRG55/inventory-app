@@ -37,32 +37,38 @@
                         </div>
                         <div class="form-group">
                             <label for="price">
-                                Price
+                                Price <span>*</span>
                             </label>
                             <input 
-                                type="text" 
+                                type="number" 
                                 id="price" 
-                                name="price"                      
+                                name="price"
+                                required                      
                             >
                         </div> 
                     </div>
                     <div>            
                         <div class="form-group">
                             <label for="quantity">
-                                Quantity
+                                Quantity <span>*</span>
                             </label>
                             <input 
-                                type="text" 
+                                type="number" 
                                 id="quantity" 
-                                name="quantity"                     
+                                name="quantity"
+                                required                     
                             >
                         </div>
                         <div class="form-group">
                             <label>
                                 Category
                             </label>
-                            <select>
-                                <option>None</option>
+                            <select name="category_id">
+                                <% categories.forEach((category) => { %>
+                                    <option value="<%= category.id %>">
+                                        <%= category.name %>
+                                    </option>
+                                <% }) %>                                
                             </select>
                         </div>
                     </div> 
@@ -70,9 +76,7 @@
                         <label for="description">
                             Description
                         </label>
-                        <textarea 
-                            type="text" 
-                            id="description" 
+                        <textarea                          
                             name="description"
                             rows="5"                     
                         ></textarea>

@@ -2,12 +2,25 @@ const db = require("../db/queries");
 
 async function productsAllGet(req, res) {
     const products = await db.getAllProducts();
+    const categories = await db.getAllCategories();    
+    const inputsSortBy = [
+        {name: "sort", value: "price_asc", labelText: "Price Low to High"},
+        {name: "sort", value: "price_desc", labelText: "Price High to Low"},
+        {name: "sort", value: "name_asc", labelText: "Product A to Z"},
+        {name: "sort", value: "name_desc", labelText: "Product Z to A"}
+    ];   
 
-    res.render("products", { title: "Products", products: products });
+    res.render("products", { 
+        title: "Products", 
+        products: products, 
+        categories: categories,
+        inputsSortBy: inputsSortBy
+     });
 };
 
 async function addProductFormGet(req, res) { 
-    res.render("product_new", { title: "Add a product" });
+    const categories = await db.getAllCategories();
+    res.render("product_new", { title: "Add Product", categories: categories  });
 };
 
 async function addProductFormPost(req, res) {

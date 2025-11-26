@@ -1,0 +1,10 @@
+<div class="filter">    
+    <form action="/products" method="get">      
+        <% inputsSortBy.forEach((input) => { %>           
+            <div>     
+                <input type="radio" name="<%= input.name %>" id="<%= input.value %>" value="<%= input.value %>" onchange="this.form.submit()"                  
+                <label for="<%= input.value %>"><%= input.labelText %></label>        
+            </div> 
+        <% }) %>       
+    </form>
+</div>

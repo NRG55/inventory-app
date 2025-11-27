@@ -1,7 +1,7 @@
 const pool = require("./pool");
 
 /*------------- PRODUCTS QUERIES ----------------*/
-const addProduct = async (product) => {
+const addProduct = async (product) => { 
     await pool.query(`INSERT INTO products (name, description, price, quantity, sku, category_id, image_src) VALUES ($1, $2, $3, $4, $5, $6, $7)`, 
         [
             product.name,
@@ -15,7 +15,7 @@ const addProduct = async (product) => {
     );
 };
 
-const getAllProducts = async () => {  
+const getAllProducts = async () => {     
     const { rows } = await pool.query(
         "SELECT products.*, LOWER(categories.name) AS category FROM products JOIN categories ON category_id = categories.id");
  
@@ -34,6 +34,37 @@ const updateProduct = async (id, name) => {
 
 const deleteProductbyId = async (productId) => {
     await pool.query("DELETE FROM products WHERE id = $1", [productId]);    
+};
+
+const getFilteredProducts = async (sort) => {
+     let SQL = `
+            SELECT products.*, categories.name AS category FROM products 
+            JOIN categories ON category_id = categories.id    
+        `;
+    let orderBy;
+ 
+    switch (sort) {       
+        case "name_asc":
+            orderBy = "ORDER BY products.name ASC;";
+            break;
+
+        case "name_desc":
+            orderBy = "ORDER BY products.name DESC;";
+            break;
+
+        case "price_asc":
+            orderBy = "ORDER BY products.price ASC;";
+            break;
+
+        case "price_desc":
+            orderBy = "ORDER BY products.price DESC;";
+            break;
+    };   
+
+    SQL += ` ${orderBy}`;
+    console.log(SQL)
+    const { rows } = await pool.query(SQL);   
+    return rows;
 };
 
 /*------------ CATEGORIES QUERIES ---------------*/
@@ -73,6 +104,7 @@ module.exports = {
     addProduct,
     updateProduct,
     deleteProductbyId,
+    getFilteredProducts,
     getAllCategories,
     addCategory,
     getCategoryById,

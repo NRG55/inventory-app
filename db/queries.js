@@ -37,60 +37,74 @@ const deleteProductbyId = async (productId) => {
 };
 
 const getFilteredProducts = async (query) => {
-     let SQL = `
+     let sql = `
             SELECT products.*, categories.name AS category FROM products 
             JOIN categories ON category_id = categories.id    
         `;
 
     const valuesArray = []; // node-postgresql parameters that will be inserted into the SQL query
-    let orderBy = "";
-    let byCategories = "";
+    let parametersPlaceholders = [];  // parameterPlaceholder (ex: $1, $2) for parameterized query parameteres. Example: VALUES ($1, $2, ...), ["value1", "value2", ...]
+    let orderByProductNameOrPrice = "";
+    let whereCategoriesIn = "";
+    let productNameLike = "";    
 
     // if there is more than one category selection - query.category example: {category: [{"furniture"},{"kitchen"},...]}
     if (query.category) {
         if (Array.isArray(query.category)) {
             const categoriesArray = query.category;
-            // parameterPlaceholder (ex: $1, $2) for parameterized query parameteres. Example: VALUES ($1, $2, ...), ["value1", "value2", ...]
-            const parameterPlaceholders = categoriesArray
-                .map((category, index) => "$" + (index + 1))
-                .join(", ");
 
-            valuesArray.push(...categoriesArray); // will be passed to a parameterized sql query
-        
-            byCategories = ` WHERE categories.name IN (${parameterPlaceholders})`;
+            valuesArray.push(...categoriesArray); // will be passed to a parameterized sql query           
+            parametersPlaceholders = categoriesArray.map((category, index) => "$" + (index + 1));            
+            whereCategoriesIn = ` WHERE categories.name IN (${parametersPlaceholders})`;
         } else {
             // there is only one category selection - query.category example: {category: "furniture"}
             valuesArray.push(query.category); // will be passed to a parameterized sql query
-
-            byCategories = ` WHERE categories.name IN ($1)`;
+            whereCategoriesIn = ` WHERE categories.name IN ($1)`;
         };
     };
- 
+
+    if (query.search) {
+        valuesArray.push(`%${query.search}%`);      
+        if (valuesArray.length > 1) {                    
+            parametersPlaceholders.push(`$${valuesArray.length}`);
+            // a category is selected so AND clause is used  
+            productNameLike = `AND LOWER(products.name) LIKE LOWER($${valuesArray.length})`;
+        } else {             
+            parametersPlaceholders.push("$1");
+            // no category selection so WHERE clause is used
+            productNameLike = `WHERE LOWER(products.name) LIKE LOWER($${valuesArray.length})`;
+        };
+    };
+
     switch (query.sort) {       
         case "name_asc":
-            orderBy = "ORDER BY products.name ASC;";
+            orderByProductNameOrPrice = "ORDER BY products.name ASC;";
             break;
 
         case "name_desc":
-            orderBy = "ORDER BY products.name DESC;";
+            orderByProductNameOrPrice = "ORDER BY products.name DESC;";
             break;
 
         case "price_asc":
-            orderBy = "ORDER BY products.price ASC;";
+            orderByProductNameOrPrice = "ORDER BY products.price ASC;";
             break;
 
         case "price_desc":
-            orderBy = "ORDER BY products.price DESC;";
+            orderByProductNameOrPrice = "ORDER BY products.price DESC;";
             break;
     }; 
     
-    if (byCategories) {
-       SQL += byCategories; 
+    if (whereCategoriesIn) {
+       sql += whereCategoriesIn; 
     };
 
-    SQL += ` ${orderBy} `;
-    // console.log(SQL)
-    const { rows } = await pool.query(SQL, valuesArray);   
+    if (productNameLike) {
+        sql += productNameLike;
+    };
+
+    sql += ` ${orderByProductNameOrPrice} `;   
+    
+    const { rows } = await pool.query(sql, valuesArray);   
     return rows;
 };
 

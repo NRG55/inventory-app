@@ -1,26 +1,37 @@
 <div class="filter">    
     <form action="/products" method="get">
+        <input 
+            type="hidden" 
+            name="search" 
+            placeholder="Search product..."
+            value="<%= query.search %>"          
+        />
         <h2>By categories:</h2>
         <div class="filter-section">
             <% categories.forEach((category) => { %>
                  <% if (category.name === "none") return; %>
                 <div>     
                     <input type="checkbox" name="category" id="<%= category.name %>" value="<%= category.name %>" onchange="this.form.submit()"
-                        <%= locals.selectedCategories && locals.selectedCategories.includes(category.name) ? 'checked' : '' %> />
+                        <%= locals.query.category && locals.query.category.includes(category.name) ? 'checked' : '' %> />
                     <label class="category-name" for="<%= category.name %>"><%= category.name %></label>                          
                 </div>
             <% }) %>
         </div>
         <h2>Sort by:</h2>
-        <div class="filter-section">      
-            <% inputsSortBy.forEach((input) => { %>           
+        <div class="filter-section">
+            <%  const inputsSortBy = [
+                    {value: "price_asc", labelText: "Price Low to High"},
+                    {value: "price_desc", labelText: "Price High to Low"},
+                    {value: "name_asc", labelText: "Product A to Z"},
+                    {value: "name_desc", labelText: "Product Z to A"}
+                ];      
+                inputsSortBy.forEach((input) => { %>           
                 <div>     
-                    <input type="radio" name="<%= input.name %>" id="<%= input.value %>" value="<%= input.value %>" onchange="this.form.submit()"
-                        <%= locals.sort === input.value ? 'checked' : '' %>/>
+                    <input type="radio" name="sort" id="<%= input.value %>" value="<%= input.value %>" onchange="this.form.submit()"
+                        <%= locals.query.sort === input.value ? 'checked' : '' %>/>
                     <label for="<%= input.value %>"><%= input.labelText %></label>        
                 </div> 
             <% }) %>
-        </div>    
-        <% console.log(locals.selectedCategories)%>     
+        </div>           
     </form>
 </div>

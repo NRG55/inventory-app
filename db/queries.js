@@ -36,14 +36,37 @@ const deleteProductbyId = async (productId) => {
     await pool.query("DELETE FROM products WHERE id = $1", [productId]);    
 };
 
-const getFilteredProducts = async (sort) => {
+const getFilteredProducts = async (query) => {
      let SQL = `
             SELECT products.*, categories.name AS category FROM products 
             JOIN categories ON category_id = categories.id    
         `;
-    let orderBy;
+
+    const valuesArray = []; // node-postgresql parameters that will be inserted into the SQL query
+    let orderBy = "";
+    let byCategories = "";
+
+    // if there is more than one category selection - query.category example: {category: [{"furniture"},{"kitchen"},...]}
+    if (query.category) {
+        if (Array.isArray(query.category)) {
+            const categoriesArray = query.category;
+            // parameterPlaceholder (ex: $1, $2) for parameterized query parameteres. Example: VALUES ($1, $2, ...), ["value1", "value2", ...]
+            const parameterPlaceholders = categoriesArray
+                .map((category, index) => "$" + (index + 1))
+                .join(", ");
+
+            valuesArray.push(...categoriesArray); // will be passed to a parameterized sql query
+        
+            byCategories = ` WHERE categories.name IN (${parameterPlaceholders})`;
+        } else {
+            // there is only one category selection - query.category example: {category: "furniture"}
+            valuesArray.push(query.category); // will be passed to a parameterized sql query
+
+            byCategories = ` WHERE categories.name IN ($1)`;
+        };
+    };
  
-    switch (sort) {       
+    switch (query.sort) {       
         case "name_asc":
             orderBy = "ORDER BY products.name ASC;";
             break;
@@ -59,11 +82,15 @@ const getFilteredProducts = async (sort) => {
         case "price_desc":
             orderBy = "ORDER BY products.price DESC;";
             break;
-    };   
+    }; 
+    
+    if (byCategories) {
+       SQL += byCategories; 
+    };
 
-    SQL += ` ${orderBy}`;
-    console.log(SQL)
-    const { rows } = await pool.query(SQL);   
+    SQL += ` ${orderBy} `;
+    // console.log(SQL)
+    const { rows } = await pool.query(SQL, valuesArray);   
     return rows;
 };
 

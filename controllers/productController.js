@@ -9,15 +9,18 @@ async function productsAllGet(req, res) {
     ];
     
     const categories = await db.getAllCategories();
-    
-    if (req.query.sort) {
-        const products = await db.getFilteredProducts(req.query.sort);         
+
+    const isQuery = Object.keys(req.query).length !== 0;
+    console.log(req.query)
+    if (isQuery) {
+        const products = await db.getFilteredProducts(req.query);         
 
         res.render("products", { 
             title: "Products", 
             products: products, 
             categories: categories,
             inputsSortBy: inputsSortBy,
+            selectedCategories: req.query.category,
             sort: req.query.sort
         });
 

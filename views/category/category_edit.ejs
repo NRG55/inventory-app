@@ -7,7 +7,7 @@
     <title><%= title %></title>
 </head>  
     <body>
-        <%- include("partials/header") %>
+        <%- include("../partials/header") %>
         <main>
             <h1><%= title %></h1> 
             <form action="/categories/edit/<%= category.id %>" method="POST" >
@@ -27,6 +27,6 @@
                 <button type="submit">Update</button>
             </form>
         </main>        
-        <%- include("partials/footer") %>             
+        <%- include("../partials/footer") %>             
     </body>
 </html>

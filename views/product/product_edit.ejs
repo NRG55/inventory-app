@@ -7,10 +7,10 @@
     <title><%= title %></title>
 </head>  
     <body>
-        <%- include("partials/header") %>
+        <%- include("../partials/header") %>
         <main>
-            <div class="add-product-container">           
-                <form action="/products/new" method="POST" id="newProductForm" class="add-product-form">
+            <div class="product-form-container">           
+                <form action="/products/edit/<%= product.id %>" method="POST" id="productForm" class="product-form">
                     <h1><%= title %></h1> 
                     <div class="form-group">
                         <label for="name">
@@ -19,7 +19,8 @@
                         <input 
                             type="text" 
                             id="name" 
-                            name="name"                      
+                            name="name"
+                            value="<%= product.name %>"                      
                             required
                         >
                     </div>
@@ -31,7 +32,8 @@
                             <input 
                                 type="text" 
                                 id="sku" 
-                                name="sku"                       
+                                name="sku"
+                                value="<%= product.sku %>"                       
                                 required
                             >
                         </div>
@@ -43,6 +45,7 @@
                                 type="number" 
                                 id="price" 
                                 name="price"
+                                value="<%= product.price %>"
                                 required                      
                             >
                         </div> 
@@ -56,6 +59,7 @@
                                 type="number" 
                                 id="quantity" 
                                 name="quantity"
+                                value="<%= product.quantity %>"
                                 required                     
                             >
                         </div>
@@ -65,7 +69,10 @@
                             </label>
                             <select name="category_id">
                                 <% categories.forEach((category) => { %>
-                                    <option value="<%= category.id %>">
+                                    <option 
+                                        value="<%= category.id %>"
+                                        <%= category.id === product.category_id ? "selected" : "" %>
+                                    >
                                         <%= category.name %>
                                     </option>
                                 <% }) %>                                
@@ -77,19 +84,19 @@
                             Description
                         </label>
                         <textarea                          
-                            name="description"
+                            name="description"                            
                             rows="5"                     
-                        ></textarea>
+                        ><%= product.description %></textarea>
                     </div>              
                 </form>
                 <div class="buttons-container">
-                    <form action="/products" method="GET">
+                    <form action="/products/<%= product.id %>" method="GET">
                         <button type="submit">CANCEL</button>        
                     </form>                    
-                    <button type="submit" form="newProductForm">ADD PRODUCT</button>                   
+                    <button type="submit" form="productForm">UPDATE</button>                   
                 </div>
             </div>             
         </main>
-        <%- include("partials/footer") %>   
+        <%- include("../partials/footer") %>   
     </body>
 </html>

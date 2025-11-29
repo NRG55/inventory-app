@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+    <title><%= title %></title>
+</head>  
+    <body>        
+        <%- include("../partials/header") %> 
+        <main>      
+        <ul class="categories-list">
+            <a href="/categories/new" class="add-category-link">Add Category</a> 
+            <% categories.forEach((category) => { %>
+                <% if (category.name === "none") return; %>
+                <li>
+                    <div>
+                        <h2><%= category.name %></h2> 
+                        <p><%= category.description %></p>                       
+                    </div>
+                    <div class="buttons-container">
+                        <form action="/categories/edit/<%=category.id%>" method="GET">
+                            <button type="submit">Edit</button>        
+                        </form>
+                        <form action="/categories/delete/<%=category.id%>" method="POST">
+                            <button type="submit">Delete</button>        
+                        </form>
+                    </div>                   
+                </li>               
+            <% }) %>
+        </ul>
+        </main>
+        <%- include("../partials/footer") %>        
+    </body>
+</html>

@@ -7,7 +7,7 @@
     <title>Document</title>
 </head>
 <body>
-    <%- include("partials/header") %>
+    <%- include("../partials/header") %>
     <main>
         <div class="card">
             <div class="nav-div">
@@ -17,13 +17,14 @@
                 </a>               
             </div>
             <div class="image-container">
-                <img src="">
+                <img src="<%= product.image_src %>">
             </div>
             <div class="description">
                 <h2><%= product.name %></h2>
                 <h4>Qty: <%= product.quantity %></h4>
                 <h1>€<%= product.price %></h1>
                 <p><%= product.description %></p>
+                <p>SKU: <%= product.sku %></p>
                 <div class="buttons-container">
                     <form action="/products/edit/<%=product.id%>" method="GET">
                         <button type="submit">Edit</button>        
@@ -35,6 +36,6 @@
             </div>
         </div>         
     </main>
-    <%- include("partials/footer") %>    
+    <%- include("../partials/footer") %>    
 </body>
 </html>

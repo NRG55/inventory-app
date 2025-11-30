@@ -1,24 +1,13 @@
-<nav class="navbar">    
-        <a class="home-link" href="/">
-            <img src="" alt="logo"/>
-            inventory
-        </a>     
-        <ul>              
-            <li>
-                <a href="/products">Products</a>
+<nav class="navbar">     
+        <ul id="mainNav" class="main-menu">              
+            <li class="nav-item">
+                <a href="/products" class="<%= path.startsWith('/products') ? 'active' : '' %>">Products</a>
             </li>
-            <li>
-                <a href="/categories">Categories</a>
+            <li class="nav-item">
+                <a href="/categories" class="<%= path.startsWith('/categories') ? 'active' : '' %>">Categories</a>
             </li>
         </ul>
-        <form action="/products/search" method="POST">
-            <input            
-                type="search"
-                placeholder="Search products"               
-                name="search"
-            />
-            <button type="submit">Search</button>
-        </form>       
+       
         <!-- <button class="navbar-toggle-button">
             <span>|||</span>
         </button>    -->

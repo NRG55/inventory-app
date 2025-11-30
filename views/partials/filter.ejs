@@ -7,10 +7,16 @@
             value="<%= query.search %>"          
         />
         <h2>By categories:</h2>
-        <div class="filter-section">
+        <div class="filter-section category-filter-section">
             <% categories.forEach((category) => { %>
-                 <% if (category.name === "none") return; %>
-                <div>     
+                <% if (category.name === "none") { %>
+                    <div class="form-group no-category">     
+                        <input type="checkbox" name="category" id="<%= category.name %>" value="<%= category.name %>" onchange="this.form.submit()"
+                            <%= locals.query.category && locals.query.category.includes(category.name) ? 'checked' : '' %> />
+                        <label class="category-name" for="<%= category.name %>">no category</label>                          
+                    </div>
+                    <% return; }; %>
+                <div class="form-group">     
                     <input type="checkbox" name="category" id="<%= category.name %>" value="<%= category.name %>" onchange="this.form.submit()"
                         <%= locals.query.category && locals.query.category.includes(category.name) ? 'checked' : '' %> />
                     <label class="category-name" for="<%= category.name %>"><%= category.name %></label>                          
@@ -26,7 +32,7 @@
                     {value: "name_desc", labelText: "Product Z to A"}
                 ];      
                 inputsSortBy.forEach((input) => { %>           
-                <div>     
+                <div class="form-group">     
                     <input type="radio" name="sort" id="<%= input.value %>" value="<%= input.value %>" onchange="this.form.submit()"
                         <%= locals.query.sort === input.value ? 'checked' : '' %>/>
                     <label for="<%= input.value %>"><%= input.labelText %></label>        

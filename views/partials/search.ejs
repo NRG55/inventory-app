@@ -1,0 +1,24 @@
+<form action="/products" method="GET" class="search-form <%= locals.query.filterClosed !== 'x' ? 'search-form-active' : ''%>"> 
+<input            
+        type="search"
+        placeholder="Search product..."
+        value="<%= locals.query ? query.search  : '' %>"             
+        name="search"
+    />
+    <button type="submit">               
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1" stroke="currentColor" class="size-4">
+            <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"></path>
+        </svg>
+    </button>   
+    <% if (locals.query && query.category) { 
+        let categories = query.category;
+        if (!Array.isArray(categories)) {
+            categories = [locals.query.category];
+        };       
+        categories.forEach((category) => { %>
+            <input type="hidden" name="category" value="<%= category %>" />
+        <% })} %>
+        <% if (locals.query && query.sort) { %>
+            <input type="hidden" name="sort" value="<%= query.sort %>" />
+        <% } %>
+</form>       

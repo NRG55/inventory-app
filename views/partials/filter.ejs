@@ -1,12 +1,18 @@
-<div class="filter">    
-    <form action="/products" method="get">
+<div class="filter <%= locals.query.filterClosed !== "x" ? 'filter-active' : ''%>"> 
+     <%- include("../partials/search") %>     
+    <form action="/products" method="get" id="mainFilter">
         <input 
             type="hidden" 
             name="search" 
             placeholder="Search product..."
             value="<%= query.search %>"          
         />
+        <% locals.query.filterClosed = "open" %>
+        <label for="closeFilter" class="close-filter">
+            <input type="submit" id="closeFilter" value="x" name="filterClosed"><img src="/images/close.svg"/></input>
+        </label>    
         <h2>By categories:</h2>
+        </label>
         <div class="filter-section category-filter-section">
             <% categories.forEach((category) => { %>
                 <% if (category.name === "none") { %>

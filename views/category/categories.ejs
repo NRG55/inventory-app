@@ -8,26 +8,36 @@
 </head>  
     <body>        
         <%- include("../partials/header") %> 
-        <main>      
+        <main>                  
         <ul class="categories-list">
-            <a href="/categories/new" class="add-category-link">Add Category</a> 
-            <% categories.forEach((category) => { %>
-                <% if (category.name === "none") return; %>
+            <a href="/categories/new" class="add-category-link">+ Add Category</a>                          
+            <% categories.forEach((category) => { %>                    
+                <% if (category.name === "none") return; %>               
                 <li>
                     <div>
-                        <h2><%= category.name %></h2> 
-                        <p><%= category.description %></p>                       
-                    </div>
+                        <form action="/products" method="GET"> 
+                            <h2><%= category.name %></h2> 
+                            <p><%= category.description %></p>                       
+                                <label class="category-name" for="<%= category.name %>">Show products <span>&#8250;&#8250;</span></label>
+                                <input 
+                                    type="radio" 
+                                    name="category" 
+                                    id="<%= category.name %>" 
+                                    value="<%= category.name %>" 
+                                    onchange="this.form.submit()"                                                                      
+                                />
+                        </form>                                                                
+                    </div>                        
                     <div class="buttons-container">
                         <form action="/categories/edit/<%=category.id%>" method="GET">
-                            <button type="submit">Edit</button>        
+                            <button type="submit" class="edit-button"><img src="./images/edit.png"/></button>        
                         </form>
                         <form action="/categories/delete/<%=category.id%>" method="POST">
-                            <button type="submit">Delete</button>        
+                            <button type="submit" class="delete-button"><img src="./images/delete.png"/></button>        
                         </form>
                     </div>                   
                 </li>               
-            <% }) %>
+            <% }) %>            
         </ul>
         </main>
         <%- include("../partials/footer") %>        

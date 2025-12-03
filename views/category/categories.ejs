@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+    <script defer src="/script/script.js"></script>
     <title><%= title %></title>
 </head>  
     <body>        
@@ -17,20 +18,26 @@
                     <div>
                         <form action="/products" method="GET"> 
                             <h2><%= category.name %></h2> 
-                            <p><%= category.description %></p>                       
-                                <label class="category-name" for="<%= category.name %>">Show products <span>&#8250;&#8250;</span></label>
-                                <input 
-                                    type="radio" 
-                                    name="category" 
-                                    id="<%= category.name %>" 
-                                    value="<%= category.name %>" 
-                                    onchange="this.form.submit()"                                                                      
-                                />
+                            <p><%= category.description %></p>
+                            <div class="bottom-div">
+                                <div>
+                                    <label class="category-name" for="<%= category.name %>">Show products <span class="arrow-span">&#8250;&#8250;</span></label>
+                                    <input 
+                                        type="radio" 
+                                        name="category" 
+                                        id="<%= category.name %>" 
+                                        value="<%= category.name %>" 
+                                        onchange="this.form.submit()"                                                                      
+                                    />
+                                    <input type="hidden" name="filterClosed" value="x"/>
+                                </div>
+                                <p>Items: <span class="quantity-span"><%= category.productsQuantity %></span></p>
+                            </div>                       
                         </form>                                                                
                     </div>                        
-                    <div class="buttons-container">
+                    <div class="buttons-container">                        
                         <form action="/categories/edit/<%=category.id%>" method="GET">
-                            <button type="submit" class="edit-button"><img src="./images/edit.png"/></button>        
+                            <button type="submit" class="edit-button">Edit</button>        
                         </form>
                         <form action="/categories/delete/<%=category.id%>" method="POST">
                             <button type="submit" class="delete-button"><img src="./images/delete.png"/></button>        
@@ -42,4 +49,5 @@
         </main>
         <%- include("../partials/footer") %>        
     </body>
+    
 </html>

@@ -1,16 +1,18 @@
-<div class="filter <%= locals.query.filterClosed !== "x" ? 'filter-active' : ''%>"> 
-     <%- include("../partials/search") %>     
+<% if (locals.url.slice(0,8) !== '/?search') locals.query.filterClosed = 'x' %> 
+<div class="filter <%= locals.query.filterClosed === 'x' ? '' : 'filter-active' %> ">
+    <% locals.url.slice(0,8) === '/?search' ? locals.query.filterClosed = 'open' : 'x' %>   
+    <%- include("../partials/search") %>   
     <form action="/products" method="get" id="mainFilter">
         <input 
             type="hidden" 
             name="search" 
             placeholder="Search product..."
             value="<%= query.search %>"          
-        />
-        <% locals.query.filterClosed = "open" %>
+        />        
         <label for="closeFilter" class="close-filter">
-            <input type="submit" id="closeFilter" value="x" name="filterClosed"><img src="/images/close.svg"/></input>
-        </label>    
+
+            <input type="submit" id="closeFilter" value="x" name="filterClosed"><img src="./images/close.svg"/></input>
+        </label>          
         <h2>By categories:</h2>
         </label>
         <div class="filter-section category-filter-section">
@@ -19,13 +21,13 @@
                     <div class="form-group no-category">     
                         <input type="checkbox" name="category" id="<%= category.name %>" value="<%= category.name %>" onchange="this.form.submit()"
                             <%= locals.query.category && locals.query.category.includes(category.name) ? 'checked' : '' %> />
-                        <label class="category-name" for="<%= category.name %>">no category</label>                          
+                        <label class="category-name" for="<%= category.name %>">no category<span><%= category.productsQuantity > 0 ? category.productsQuantity : "" %></span></label>                          
                     </div>
                     <% return; }; %>
                 <div class="form-group">     
                     <input type="checkbox" name="category" id="<%= category.name %>" value="<%= category.name %>" onchange="this.form.submit()"
                         <%= locals.query.category && locals.query.category.includes(category.name) ? 'checked' : '' %> />
-                    <label class="category-name" for="<%= category.name %>"><%= category.name %></label>                          
+                    <label class="category-name" for="<%= category.name %>"><%= category.name %><span><%= category.productsQuantity > 0 ? category.productsQuantity : "" %></span></label>                          
                 </div>
             <% }) %>
         </div>

@@ -9,26 +9,36 @@ const { getAllCategories,
 
 async function productsAllGet(req, res) {      
     const categories = await getAllCategories();
+    const updatedCategories = await Promise.all(categories.map(async(category) => {
+            const productsArray = await getFilteredProducts({ category: category.name });
+
+        return {
+            name: category.name,            
+            productsQuantity: productsArray.length            
+        };
+    }));
+
     const isQuery = Object.keys(req.query).length !== 0;    
     let products;
-
-    if (isQuery) {  
+    
+    if (isQuery) {       
         products = await getFilteredProducts(req.query);
     } else {
         products = await getAllProducts(); 
     };        
 
-    res.render("products", { 
+    res.render("product/products", { 
         title: "Products", 
         products: products, 
-        categories: categories,          
-        query: req.query
+        categories: updatedCategories,          
+        query: req.query,
+        url: req.url                
     });
 };
 
 async function addProductFormGet(req, res) { 
     const categories = await getAllCategories();
-    res.render("product_new", { title: "Add Product", categories: categories });
+    res.render("product/product_new", { title: "Add Product", categories: categories });
 };
 
 async function addProductFormPost(req, res) {
@@ -44,7 +54,7 @@ async function editProductFormGet(req, res) {
     const category = await getCategoryById(product.category_id)
     const categories = await getAllCategories();
 
-    res.render("product_edit", { title: "Edit product information", product: product, category: category, categories: categories });
+    res.render("product/product_edit", { title: "Edit product information", product: product, category: category, categories: categories });
 };
 
 async function editProductFormPost(req, res) {
@@ -59,7 +69,7 @@ async function productDetailsGet(req, res) {
     const id = req.params.id;
     const product = await getProductById(id);
 
-    res.render("product_details", { product: product});    
+    res.render("product/product_details", { product: product});    
 };
 
 async function deleteProductPost(req, res) {

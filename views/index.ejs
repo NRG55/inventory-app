@@ -4,11 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+    <script defer src="/script/script.js"></script>
     <title>Home</title>
 </head>
 <body>
     <%- include("partials/header") %>
-    <main></main>    
+    <main>
+        <div class="welcome-container">
+            <h1>WELCOME</h1>
+            <p> to the Inventory Management System. You can add, edit, and track your stock here.</p>
+            <a href="/products">PRODUCTS</a>
+            <a href="/categories">CATEGORIES</a>
+        </div>
+    </main>    
     <%- include("partials/footer") %>   
 </body>
 </html>

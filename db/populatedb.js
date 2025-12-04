@@ -1,16 +1,19 @@
 const { Client } = require("pg");
-const db = require("../db/queries");
+const products = require("./data/products");
+const categories= require("./data/categories");
+const brands = require("./data/brands");
 require("dotenv").config();
 
 const createProductsTable = `
     CREATE TABLE IF NOT EXISTS products (
                 id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
                 name VARCHAR (50) NOT NULL UNIQUE,
-                description VARCHAR (200),
+                sku VARCHAR (20) NOT NULL UNIQUE,
                 price DECIMAL(6, 2),
                 quantity INTEGER,
-                sku VARCHAR (20) NOT NULL UNIQUE,
+                description VARCHAR (200),                
                 category_id INTEGER,
+                brand_id INTEGER,
                 image_src TEXT            
             );
     `;
@@ -23,59 +26,94 @@ const createCategoriesTable = `
             );
     `;
 
-const insertCategoriesData = `
-    INSERT INTO categories (name, description)
-    VALUES  ('Furniture', 'Living room seating, tables, chairs, beds, mattresses, and office furniture.'),
-            ('Decoration', 'Wall art, mirrors, statues, candles, artificial plants, and seasonal decor.'),
-            ('Kitchen', 'Cookware, bakeware, tableware, kitchen tools, and appliances like toasters and kettles.');    
+const createBrandsTable = `
+    CREATE TABLE IF NOT EXISTS brands (
+                id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+                name VARCHAR (40) NOT NULL UNIQUE,
+                contact_details TEXT    
+            );
     `;
 
-const ownFetch = async (url, categoryId) => {
-    const res = await fetch(url);
-    const data = await res.json();
+const client = new Client({ connectionString: `postgresql://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@localhost:5432/inventory`});
 
-    return { data, categoryId };
+async function resetTables() {
+    await client.query("DROP TABLE IF EXISTS products, categories, brands;");
+    console.log("Tables dropped");
 };
 
-let requests = [];
-let categories = ["furniture", "home-decoration", "kitchen-accessories"];
+async function createTables() {
+    await client.query(createProductsTable);
+    await client.query(createCategoriesTable);
+    await client.query(createBrandsTable);
+    console.log("Tables created");
+};
 
-categories.forEach((category, i) => {
-    requests.push(ownFetch(`https://dummyjson.com/products/category/${category}`, i+1));
-});
+async function insertProducts() {
+    for (const product of products) {
+        await client.query(
+            `
+            INSERT INTO products (name, description, price, quantity, sku, category_id, brand_id, image_src)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8);
+            `, 
+            [
+                product.name, 
+                product.description,
+                product.price,
+                product.stock,
+                product.sku,
+                product.category_id,
+                product.brand_id,
+                product.image_src                 
+            ]
+        );
+    };
+    console.log("Products data is inserted");
+};
 
-const insertProductsData = async () => {
-    const results = await Promise.all(requests);
-    // results: {data: {}, categoryId: 1}, {data: {}, categoryId: 2}, ...
-    results.forEach((result) => {
-        result.data.products.forEach((product) => {
-            db.addProduct({   
-                            name: product.title, 
-                            description: product.description,
-                            price: product.price,
-                            quantity: product.stock,
-                            sku: product.sku,
-                            category_id: result.categoryId,
-                            image_src: `/images/product-${product.sku}.webp`
-                        });                
-        });        
-    });
+async function insertCategories() {
+    for (const category of categories) {
+        await client.query(
+            `
+            INSERT INTO categories (name, description) VALUES ($1, $2)
+            `, 
+            [category.name, category.description]
+        );
+    };
+    console.log("Categories data is inserted");
+};
+
+async function insertBrands() {
+    for (const brand of brands) {
+        await client.query(
+            `
+            INSERT INTO brands (name, contact_details) VALUES ($1, $2)
+            `, 
+            [brand.name, brand.contact_details]
+        );
+    };
+    console.log("Brands data is inserted");
+};
+
+async function insertData() {
+    await insertProducts();
+    await insertCategories();
+    await insertBrands();
+    console.log("All data is inserted");
 };
 
 async function main() {
-    console.log("Seeding...");
-    const client = new Client({
-        connectionString:  `postgresql://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@localhost:5432/inventory`,
-    });
-    await client.connect();
-    await client.query("DROP TABLE IF EXISTS products, categories;");   
-    await client.query(createProductsTable);
-    await client.query(createCategoriesTable);
-    await client.query(insertCategoriesData);      
-   
-    await client.end();
-    console.log("done");
-}
+    console.log("Seeding..."); 
+    try {
+        await client.connect();
+        await resetTables();
+        await createTables();
+        await insertData();
+    } catch (err) {
+        console.error(err);
+    } finally {
+        await client.end();
+        console.log("done");
+    }   
+};
 
 main();
-insertProductsData();

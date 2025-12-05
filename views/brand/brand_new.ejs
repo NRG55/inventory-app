@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+    <script defer src="/script/script.js"></script>
+    <title><%= title %></title>
+</head>  
+    <body>
+        <%- include("../partials/header") %>
+        <main>
+            <div class="form-container">           
+                <form action="/brands/new" method="POST" id="newBrandForm" class="form">
+                    <h1><%= title %></h1> 
+                    <div class="form-group">
+                        <label for="name">
+                            Name <span>*</span>
+                        </label>
+                        <input 
+                            type="text" 
+                            id="name" 
+                            name="name"                      
+                            required
+                        >
+                    </div>                     
+                    <div class="form-group">
+                        <label for="contact_details">
+                            Contact details
+                        </label>
+                        <textarea                          
+                            name="contact_details"
+                            rows="5"                     
+                        ></textarea>
+                    </div>              
+                </form>
+                <div class="buttons-container">
+                    <form action="/brands" method="GET">
+                        <button type="submit">CANCEL</button>        
+                    </form>                    
+                    <button type="submit" form="newBrandForm">ADD BRAND</button>                   
+                </div>
+            </div>             
+        </main>
+        <%- include("../partials/footer") %>   
+    </body>
+</html>

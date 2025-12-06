@@ -1,4 +1,4 @@
-export default [
+module.exports = [
     {
         name: 'none',
         description: ''
@@ -15,4 +15,4 @@ export default [
         name: 'Kitchen',
         description: 'Cookware, bakeware, tableware, kitchen tools, and appliances like toasters and kettles.'
     }    
-]
+];

@@ -1,4 +1,5 @@
 const pool = require("../pool");
+const { getProductsByCategoryId } = require("./product");
 
 const getAllCategories = async () => {  
     const { rows } = await pool.query("SELECT * FROM categories");
@@ -21,12 +22,35 @@ const getCategoryById = async (categoryId) => {
     return rows[0];
 };
 
-const updateCategory = async (id, name) => {    
-    await pool.query("UPDATE categories SET name = $2 WHERE id = $1", [id, name]);
+const updateCategory = async (categoryId, categoryObject) => {    
+       await pool.query(
+            `
+            UPDATE categories 
+            SET name = $2, description = $3 
+            WHERE id = $1;
+            `, 
+            [categoryId, categoryObject.name, categoryObject.description]
+        );
 };
 
 const deleteCategorybyId = async (categoryId) => {
     await pool.query("DELETE FROM categories WHERE id = $1", [categoryId]);    
+};
+
+const getCategoriesAndItsProductsQuantity = async () => {
+    const categories = await getAllCategories(); 
+    const categoriesAndItsProductsQuantity = await Promise.all(categories.map(async(category) => {
+            const productsArray = await getProductsByCategoryId(category.id);
+
+            return {
+                id: category.id,
+                name: category.name,
+                description: category.description,            
+                productsQuantity: productsArray.length            
+            };
+    }));
+
+    return categoriesAndItsProductsQuantity;
 };
 
 module.exports = {    
@@ -34,5 +58,6 @@ module.exports = {
     addCategory,
     getCategoryById,
     updateCategory,
-    deleteCategorybyId
+    deleteCategorybyId,
+    getCategoriesAndItsProductsQuantity
 }

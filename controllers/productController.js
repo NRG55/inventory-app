@@ -5,56 +5,87 @@ const { getAllProducts,
         deleteProductbyId,
         getFilteredProducts } = require("../db/queries/product");
 const { getAllCategories,
-        getCategoryById } = require("../db/queries/category");
+        getCategoryById,
+        getCategoriesAndItsProductsQuantity } = require("../db/queries/category");
+const { getAllBrands,     
+        getBrandsAndItsProductsQuantity } = require("../db/queries/brand");
+const { validationResult, matchedData } = require("express-validator")
+const { validateProduct } = require("../validators/validateProduct");
 
-async function productsAllGet(req, res) {      
-    const categories = await getAllCategories();
-    const updatedCategories = await Promise.all(categories.map(async(category) => {
-            const productsArray = await getFilteredProducts({ category: category.name });
+async function productsAllGet(req, res, next) {
+    try {
+        const brandsAndItsProductsQuantity = await getBrandsAndItsProductsQuantity();   
+        const categoriesAndItsProductsQuantity = await getCategoriesAndItsProductsQuantity();
+        const isQuery = Object.keys(req.query).length !== 0;    
+        let products;
+        
+        if (isQuery) {       
+            products = await getFilteredProducts(req.query);
+        } else {
+            products = await getAllProducts(); 
+        };        
 
-        return {
-            name: category.name,            
-            productsQuantity: productsArray.length            
-        };
-    }));
-
-    const isQuery = Object.keys(req.query).length !== 0;    
-    let products;
-    
-    if (isQuery) {       
-        products = await getFilteredProducts(req.query);
-    } else {
-        products = await getAllProducts(); 
-    };        
-
-    res.render("product/products", { 
-        title: "Products", 
-        products: products, 
-        categories: updatedCategories,          
-        query: req.query,
-        url: req.url                
-    });
+        res.render("product/products", { 
+            title: "Products", 
+            products: products,
+            brands: brandsAndItsProductsQuantity, 
+            categories: categoriesAndItsProductsQuantity,          
+            query: req.query,
+            url: req.url                
+        });        
+    } catch (error) {
+        next(error); // Forward error to the global error handler
+    };   
 };
 
 async function addProductFormGet(req, res) { 
     const categories = await getAllCategories();
-    res.render("product/product_new", { title: "Add Product", categories: categories });
+    const brands = await getAllBrands();
+
+    res.render("product/product_new", { title: "Add Product", categories: categories, brands: brands });
 };
 
-async function addProductFormPost(req, res) {
-    const productObject = req.body;
+const addProductFormPost = [
+    validateProduct,
+    async (req, res) => {
+       
+        const errors = validationResult(req);
+         console.log(errors)
+        if (!errors.isEmpty()) {
+            const categories = await getAllCategories();
+            const brands = await getAllBrands();
 
-    await addProduct(productObject);
-    res.redirect("/products");
-};
+            return res.status(400).render("product/product_new", {
+                title: "Add Product",
+                categories: categories, 
+                brands: brands,
+                errors: errors.array(),
+            });
+        };
+
+        const productObject = matchedData(req);
+
+        await addProduct(productObject);
+        res.redirect("/products");
+    }
+];
 
 async function editProductFormGet(req, res) {
     const id = req.params.id;
     const product = await getProductById(id);
-    const category = await getCategoryById(product.category_id)
+    const category = await getCategoryById(product.category_id);
     const categories = await getAllCategories();
+    const brands = await getAllBrands();
+    const brand = await getCategoryById(product.category_id);
 
-    res.render("product/product_edit", { title: "Edit product information", product: product, category: category, categories: categories });
+    res.render("product/product_edit", { 
+        title: "Edit product information", 
+        product: product, 
+        category: category, 
+        categories: categories,
+        brand: brand,
+        brands: brands 
+    });
 };
 
 async function editProductFormPost(req, res) {
@@ -67,9 +98,9 @@ async function editProductFormPost(req, res) {
 
 async function productDetailsGet(req, res) {
     const id = req.params.id;
-    const product = await getProductById(id);
+    const product = await getProductById(id);   
 
-    res.render("product/product_details", { product: product});    
+    res.render("product/product_details", { product: product });    
 };
 
 async function deleteProductPost(req, res) {

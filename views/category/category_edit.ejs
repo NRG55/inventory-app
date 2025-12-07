@@ -11,6 +11,7 @@
     <body>
         <%- include("../partials/header") %>
         <main>
+            <%- include("../partials/validationErrors") %>
             <div class="form-container">           
                 <form action="/categories/edit/<%= category.id %>" method="POST" id="newCategoryForm" class="form">
                     <h1><%= title %></h1> 
@@ -33,7 +34,7 @@
                         <textarea                          
                             name="description"
                             rows="5"                     
-                        ><%= category.description %>"</textarea>
+                        ><%= category.description %></textarea>
                     </div>              
                 </form>
                 <div class="buttons-container">

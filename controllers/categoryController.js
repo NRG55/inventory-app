@@ -1,57 +1,99 @@
-const { getAllCategories,
-        addCategory,
+const { addCategory,
         getCategoryById,
         updateCategory,
-        deleteCategorybyId } = require("../db/queries/category");
-const { getFilteredProducts } = require("../db/queries/product");
+        deleteCategorybyId,
+        getCategoriesAndItsProductsQuantity } = require("../db/queries/category");
+const { validationResult, matchedData } = require("express-validator")
+const { validateCategory } = require("../validators/validateCategory");
 
-async function categoriesAllGet(req, res) {
-    const categories = await getAllCategories();
-  
-    const updatedCategories = await Promise.all(categories.map(async(category) => {
-            const productsArray = await getFilteredProducts({ category: category.name });        
-        return {
-            id: category.id,
-            name: category.name,
-            description: category.description,
-            productsQuantity: productsArray.length            
-        }
-    }));
+async function categoriesAllGet(req, res, next) {
+    try {
+        const categories = await getCategoriesAndItsProductsQuantity();
 
-    res.render("category/categories", { title: "Categories", categories: updatedCategories });
+        res.render("category/categories", { title: "Categories", categories: categories });
+    } catch (error) {
+        next(error);
+    };    
 };
 
 async function addCategoryFormGet(req, res) { 
-    res.render("category/category_new", { title: "Add Category" });
+    res.render("category/category_new", { title: "Add Category", category: {} });
 };
 
-async function addCategoryFormPost(req, res) {
-    const categoryObject = req.body;
+const addCategoryFormPost = [
+    validateCategory,
+    async (req, res, next) => {
+        const errors = validationResult(req);
+          
+            if (!errors.isEmpty()) {                
 
-    await addCategory(categoryObject);
-    res.redirect("/categories", );
-};
+                return res.status(400).render("category/category_new", { 
+                    title: "Add Category",
+                    category: req.body,
+                    errors: errors.array() 
+                });
+            };
 
-async function editCategoryFormGet(req, res) {
+            const categoryObject = matchedData(req);
+
+        try { 
+            await addCategory(categoryObject);
+            res.redirect("/categories", );
+
+        } catch (error) {
+            next(error);
+        };
+}];
+
+async function editCategoryFormGet(req, res, next) {
     const id = req.params.id;
-    const category = await getCategoryById(id);    
+    try {
+        const category = await getCategoryById(id);    
    
-    res.render("category/category_edit", { title: "Edit Category", category: category });
+        res.render("category/category_edit", { title: "Edit Category", category: category });
+
+    } catch (error) {
+        next(error);
+    };    
 };
 
-async function editCategoryFormPost(req, res) {
+const editCategoryFormPost = [
+    validateCategory,
+    async (req, res, next) => {
+        const errors = validationResult(req);
+        const category = req.body;
+        category.id = req.params.id;
+     
+        if (!errors.isEmpty()) {                
+
+            return res.status(400).render("category/category_edit", { 
+                title: "Edit Category",
+                category: category,
+                errors: errors.array() 
+            });
+        };
+           
+        const categoryObject = matchedData(req);
+
+        try {
+            await updateCategory(category.id, categoryObject);
+            res.redirect("/categories");
+        
+        } catch (error) {
+            next(error);
+        };
+}];
+
+async function deleteCategoryPost(req, res, next) {
     const id = req.params.id;
-    const { name } = req.body;
 
-    await updateCategory(id, name);
-    res.redirect("/categories");
-};
+    try {
+        await deleteCategorybyId(id);
+        res.redirect("/categories");
 
-async function deleteCategoryPost(req, res) {
-    const id = req.params.id;
-
-    await deleteCategorybyId(id);
-    res.redirect("/categories");
+    } catch (error) {
+        next(error);
+    };    
 };
 
 module.exports = {

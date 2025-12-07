@@ -11,8 +11,9 @@
     <body>
         <%- include("../partials/header") %>
         <main>
+            <%- include("../partials/validationErrors") %>
             <div class="form-container">           
-                <form action="/categories/new" method="POST" id="newProductForm" class="form">
+                <form action="/categories/new" method="POST" id="newCategoryForm" class="form">
                     <h1><%= title %></h1> 
                     <div class="form-group">
                         <label for="name">
@@ -21,7 +22,8 @@
                         <input 
                             type="text" 
                             id="name" 
-                            name="name"                      
+                            name="name"
+                            value="<%= category.name || '' %>"                      
                             required
                         >
                     </div>                     
@@ -32,14 +34,14 @@
                         <textarea                          
                             name="description"
                             rows="5"                     
-                        ></textarea>
+                        ><%= category.description || "" %></textarea>
                     </div>              
                 </form>
                 <div class="buttons-container">
                     <form action="/categories" method="GET">
                         <button type="submit">CANCEL</button>        
                     </form>                    
-                    <button type="submit" form="newProductForm">ADD CATEGORY</button>                   
+                    <button type="submit" form="newCategoryForm">ADD CATEGORY</button>                   
                 </div>
             </div>             
         </main>

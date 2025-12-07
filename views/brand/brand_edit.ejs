@@ -11,6 +11,7 @@
     <body>
         <%- include("../partials/header") %>
         <main>
+            <%- include("../partials/validationErrors") %>
             <div class="form-container">           
                 <form action="/brands/edit/<%= brand.id %>" method="POST" id="newBrandForm" class="form">
                     <h1><%= title %></h1> 
@@ -30,10 +31,11 @@
                         <label for="contact_details">
                             Contact details
                         </label>
-                        <textarea                          
+                        <input
+                            type="email"                         
                             name="contact_details"
-                            rows="5"                     
-                        ><%= brand.contact_details %></textarea>
+                            value="<%= brand.contact_details %>"                     
+                        />
                     </div>              
                 </form>
                 <div class="buttons-container">

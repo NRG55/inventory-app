@@ -4,8 +4,7 @@ const { getAllProducts,
         updateProduct,
         deleteProductbyId,
         getFilteredProducts } = require("../db/queries/product");
-const { getAllCategories,
-        getCategoryById,
+const { getAllCategories,      
         getCategoriesAndItsProductsQuantity } = require("../db/queries/category");
 const { getAllBrands,     
         getBrandsAndItsProductsQuantity } = require("../db/queries/brand");
@@ -42,59 +41,88 @@ async function addProductFormGet(req, res) {
     const categories = await getAllCategories();
     const brands = await getAllBrands();
 
-    res.render("product/product_new", { title: "Add Product", categories: categories, brands: brands });
+    res.render("product/product_new", { 
+        title: "Add Product", 
+        categories: categories, 
+        brands: brands,
+        product: {} 
+    });
 };
 
 const addProductFormPost = [
     validateProduct,
-    async (req, res) => {
-       
+    async (req, res, next) => {       
         const errors = validationResult(req);
-         console.log(errors)
-        if (!errors.isEmpty()) {
-            const categories = await getAllCategories();
-            const brands = await getAllBrands();
 
-            return res.status(400).render("product/product_new", {
-                title: "Add Product",
-                categories: categories, 
-                brands: brands,
-                errors: errors.array(),
-            });
+        try {     
+            if (!errors.isEmpty()) {
+                const categories = await getAllCategories();
+                const brands = await getAllBrands();
+
+                return res.status(400).render("product/product_new", {
+                    title: "Add Product",
+                    product: req.body,
+                    categories: categories, 
+                    brands: brands,
+                    errors: errors.array(),
+                });
+            };
+
+            const productObject = matchedData(req);
+
+            await addProduct(productObject);
+            res.redirect("/products");
+
+        } catch (error) {
+            next(error);
         };
-
-        const productObject = matchedData(req);
-
-        await addProduct(productObject);
-        res.redirect("/products");
     }
 ];
 
-async function editProductFormGet(req, res) {
-    const id = req.params.id;
-    const product = await getProductById(id);
-    const category = await getCategoryById(product.category_id);
+async function editProductFormGet(req, res) {    
+    const product = await getProductById(req.params.id);
     const categories = await getAllCategories();
-    const brands = await getAllBrands();
-    const brand = await getCategoryById(product.category_id);
+    const brands = await getAllBrands();   
 
     res.render("product/product_edit", { 
-        title: "Edit product information", 
-        product: product, 
-        category: category, 
-        categories: categories,
-        brand: brand,
-        brands: brands 
+        title: "Edit product information",        
+        product: product,      
+        categories: categories,      
+        brands: brands,      
     });
 };
 
-async function editProductFormPost(req, res) {
-    const productId = req.params.id;
-    const productData = req.body;
+const editProductFormPost = [
+    validateProduct,
+    async (req, res, next) => {       
+        const errors = validationResult(req);
+        const product = req.body;
+        product.id = req.params.id;
+        
+        try {    
+            if (!errors.isEmpty()) {
+                const categories = await getAllCategories();
+                const brands = await getAllBrands();                    
 
-    await updateProduct(productId, productData);
-    res.redirect("/products");
-};
+                return res.status(400).render("product/product_edit", {
+                    title: "Edit product information",
+                    product: product,              
+                    categories: categories, 
+                    brands: brands,
+                    errors: errors.array()                
+                });
+            };
+        
+            const productData = matchedData(req);        
+
+            await updateProduct(product.id, productData);
+            res.redirect("/products");
+
+        } catch (error) {
+            next(error);
+        }
+    }
+];
 
 async function productDetailsGet(req, res) {
     const id = req.params.id;

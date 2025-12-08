@@ -1,6 +1,6 @@
 # Inventory Application
 
-[Live Version](https://) 
+[Live Version](https://inventory-app-9idr.onrender.com) 
 
 A full-stack (backend-focused) home store inventory management application built with the following tech stack:
 

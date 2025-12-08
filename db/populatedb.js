@@ -34,7 +34,7 @@ const createBrandsTable = `
             );
     `;
 
-const client = new Client({ connectionString: `postgresql://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@localhost:5432/inventory`});
+const client = new Client({ connectionString: `postgresql://${process.env.DATABASE_USER}:${process.env.DATABASE_PASS}@${process.env.DATABASE_HOST}:${process.env.PORT}/${process.env.DATABASE_NAME}`, ssl: { rejectUnauthorized: true },});
 
 async function resetTables() {
     await client.query("DROP TABLE IF EXISTS products, categories, brands;");

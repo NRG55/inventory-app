@@ -9,42 +9,46 @@
 </head>  
     <body>        
         <%- include("../partials/header") %> 
-        <main>                  
-        <ul class="categories-list">
-            <a href="/categories/new" class="add-category-link">+ Add Category</a>                          
-            <% categories.forEach((category) => { %>                             
-                <li class="<%= category.name === 'none' ? 'no-category-li' : '' %>">
-                    <div>
-                        <form action="/products" method="GET"> 
-                            <h2><%= category.name === "none" ? "No category" : category.name %></h2> 
-                            <p><%= category.description %></p>
-                            <div class="bottom-div">
-                                <div>
-                                    <label class="category-name" for="<%= category.name %>">Show products <span class="arrow-span">&#8250;&#8250;</span></label>
-                                    <input 
-                                        type="radio" 
-                                        name="category" 
-                                        id="<%= category.name %>" 
-                                        value="<%= category.name %>" 
-                                        onchange="this.form.submit()"                                                                      
-                                    />
-                                    <input type="hidden" name="filterClosed" value="x"/>
-                                </div>
-                                <p>Items: <span class="quantity-span"><%= category.productsQuantity %></span></p>
-                            </div>                       
-                        </form>                                                                
-                    </div>                        
-                    <div class="buttons-container">                        
-                        <form action="/categories/edit/<%= category.id %>" method="GET">
-                            <button type="submit" class="edit-button">edit</button>        
-                        </form>
-                        <form action="/categories/delete/<%= category.id %>" method="POST">
-                            <button type="submit" class="delete-button">delete</button>        
-                        </form>
-                    </div>                   
-                </li>               
-            <% }) %>            
-        </ul>
+        <main>
+            <div class="notice">
+                <h1>NOTICE:</h1> 
+                <p>any product left without a primary category association following the deletion will have its category status updated to "No Category".</p>
+            </div>                         
+            <ul class="categories-list">
+                <a href="/categories/new" class="add-category-link">+ Add Category</a>                          
+                <% categories.forEach((category) => { %>                             
+                    <li class="<%= category.name === 'none' ? 'no-category-li' : '' %>">
+                        <div>
+                            <form action="/products" method="GET"> 
+                                <h2><%= category.name === "none" ? "No category" : category.name %></h2> 
+                                <p><%= category.description %></p>
+                                <div class="bottom-div">
+                                    <div>
+                                        <label class="category-name" for="<%= category.name %>">Show products <span class="arrow-span">&#8250;&#8250;</span></label>
+                                        <input 
+                                            type="radio" 
+                                            name="category" 
+                                            id="<%= category.name %>" 
+                                            value="<%= category.name %>" 
+                                            onchange="this.form.submit()"                                                                      
+                                        />
+                                        <input type="hidden" name="filterClosed" value="x"/>
+                                    </div>
+                                    <p>Items: <span class="quantity-span"><%= category.productsQuantity %></span></p>
+                                </div>                       
+                            </form>                                                                
+                        </div>                        
+                        <div class="buttons-container">                        
+                            <form action="/categories/edit/<%= category.id %>" method="GET">
+                                <button type="submit" class="edit-button">edit</button>        
+                            </form>
+                            <form action="/categories/delete/<%= category.id %>" method="POST">
+                                <button type="submit" class="delete-button">delete</button>        
+                            </form>
+                        </div>                   
+                    </li>               
+                <% }) %>            
+            </ul>
         </main>
         <%- include("../partials/footer") %>        
     </body>    

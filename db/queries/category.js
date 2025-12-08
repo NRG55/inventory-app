@@ -34,6 +34,17 @@ const updateCategory = async (categoryId, categoryObject) => {
 };
 
 const deleteCategorybyId = async (categoryId) => {
+    const noCategoryId = 1;
+
+    await pool.query(
+        `
+        UPDATE products 
+        SET category_id = $1 
+        WHERE category_id = $2;
+        `,
+        [noCategoryId, Number(categoryId)]
+    );
+
     await pool.query("DELETE FROM categories WHERE id = $1", [categoryId]);    
 };
 

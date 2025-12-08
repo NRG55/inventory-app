@@ -13,7 +13,8 @@
 
 body {
     min-height: 100vh;  
-    font-family: "Raleway";  
+    font-family: "Raleway";
+    user-select: none;  
     margin: 0;
     padding: 0;   
 }
@@ -52,6 +53,7 @@ header, main {
     header, main {
         margin-left: auto;
         margin-right: auto;
+        padding: 0;
     }  
 }
 
@@ -245,6 +247,7 @@ header {
 /*--------------- HOME PAGE ----------------*/
 
 .welcome-container {
+    padding-top: 8rem;
     max-width: 25rem;
     
     h1 {
@@ -339,7 +342,7 @@ header {
 
 main {
     min-height: calc(100vh - 8rem);
-    padding-top: 7rem;
+    /* padding-top: 7rem; */
 }
 
 .add-product-link,
@@ -347,7 +350,7 @@ main {
 .add-brand-link {
     display: block;
     position: absolute;
-    top: -4rem;
+    top: 2rem;
     right: 0;     
     background: none;   
     border: solid 1px transparent;
@@ -369,7 +372,7 @@ main {
 .open-filter-button {
     cursor: pointer;
     position: absolute;
-    top: -4.2rem;
+    top: 1.8rem;
     left: 0;
     width: 3rem;   
     border: solid 1px transparent;
@@ -388,6 +391,7 @@ main {
     position: relative;
     display: grid;
     grid-template-columns: 1fr;
+    padding-top: 6rem;
 }
 
 .products-list {
@@ -423,7 +427,7 @@ main {
     .middle-div {
         display: grid;
         grid-template-rows: auto 1fr auto;
-        /* padding-right: 1.5rem; */
+        padding-right: 1.5rem;
 
         h1 {
             color: #515151;
@@ -897,11 +901,32 @@ main {
 
 /*------------------------ CATEGORIES AND BRANDS ------------------------*/
 
+.notice { 
+    display: flex;
+    justify-content: center; 
+    align-items: end; 
+    padding-top: 2rem;   
+
+    h1 {
+        align-self: self-start;
+        font-size: 1rem;
+        font-weight: 500;
+        margin-right: .5rem;
+    }
+
+    p {
+        color: var(--black-color);
+        font-size: .85rem;
+        font-weight: 200;
+    }
+}
+
 .brands-list,
 .categories-list {
     position: relative;
     display: grid;   
     gap: 1rem;
+    padding-top: 6rem;
 
     li {
         order: 1;
@@ -994,7 +1019,7 @@ main {
     button {
         cursor: pointer;
         border: none;
-        background: none;
+        background: none;      
         text-decoration: underline;         
         margin-left: .5rem; 
         color: black; 

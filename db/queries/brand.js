@@ -34,6 +34,7 @@ const updateBrand = async (brandId, brandObject) => {
 };
 
 const deleteBrandbyId = async (brandId) => {
+    await pool.query("DELETE FROM products WHERE brand_id = $1", [brandId]);
     await pool.query("DELETE FROM brands WHERE id = $1", [brandId]);    
 };
 

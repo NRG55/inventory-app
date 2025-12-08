@@ -9,42 +9,46 @@
 </head>  
     <body>        
         <%- include("../partials/header") %> 
-        <main>                  
-        <ul class="brands-list">
-            <a href="/brands/new" class="add-brand-link">+ Add Brand</a>                          
-            <% brands.forEach((brand) => { %>                             
-                <li>
-                    <div>
-                        <form action="/products" method="GET"> 
-                            <h2><%= brand.name %></h2> 
-                            <p><%= brand.contact_details %></p>
-                            <div class="bottom-div">
-                                <div>
-                                    <label class="brand-name" for="<%= brand.name %>">Show products <span class="arrow-span">&#8250;&#8250;</span></label>
-                                    <input 
-                                        type="radio" 
-                                        name="brandy" 
-                                        id="<%= brand.name %>" 
-                                        value="<%= brand.name %>" 
-                                        onchange="this.form.submit()"                                                                      
-                                    />
-                                    <input type="hidden" name="filterClosed" value="x"/>
-                                </div>
-                                <p>Items: <span class="quantity-span"><%= brand.productsQuantity %></span></p>
-                            </div>                       
-                        </form>                                                                
-                    </div>                        
-                    <div class="buttons-container">                        
-                        <form action="/brands/edit/<%= brand.id %>" method="GET">
-                            <button type="submit" class="edit-button">edit</button>        
-                        </form>
-                        <form action="/brands/delete/<%= brand.id %>" method="POST">
-                            <button type="submit" class="delete-button">delete</button>        
-                        </form>
-                    </div>                   
-                </li>               
-            <% }) %>            
-        </ul>
+        <main>
+            <div class="notice">
+                <h1>NOTICE:</h1> 
+                <p>Once you delete a brand, all products records currently linked to [BRAND NAME] will be permanently removed from the system.</p>
+            </div>                   
+            <ul class="brands-list">
+                <a href="/brands/new" class="add-brand-link">+ Add Brand</a>                          
+                <% brands.forEach((brand) => { %>                             
+                    <li>
+                        <div>
+                            <form action="/products" method="GET"> 
+                                <h2><%= brand.name %></h2> 
+                                <p><%= brand.contact_details %></p>
+                                <div class="bottom-div">
+                                    <div>
+                                        <label class="brand-name" for="<%= brand.name %>">Show products <span class="arrow-span">&#8250;&#8250;</span></label>
+                                        <input 
+                                            type="radio" 
+                                            name="brandy" 
+                                            id="<%= brand.name %>" 
+                                            value="<%= brand.name %>" 
+                                            onchange="this.form.submit()"                                                                      
+                                        />
+                                        <input type="hidden" name="filterClosed" value="x"/>
+                                    </div>
+                                    <p>Items: <span class="quantity-span"><%= brand.productsQuantity %></span></p>
+                                </div>                       
+                            </form>                                                                
+                        </div>                        
+                        <div class="buttons-container">                        
+                            <form action="/brands/edit/<%= brand.id %>" method="GET">
+                                <button type="submit" class="edit-button">edit</button>        
+                            </form>
+                            <form action="/brands/delete/<%= brand.id %>" method="POST">
+                                <button type="submit" class="delete-button">delete</button>        
+                            </form>
+                        </div>                   
+                    </li>               
+                <% }) %>            
+            </ul>
         </main>
         <%- include("../partials/footer") %>        
     </body>    

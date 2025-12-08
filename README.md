@@ -23,11 +23,11 @@ A full-stack (backend-focused) home store inventory management application built
 ## Screenshots
 <table border="1" style="width:100%">
   <tr>
-    <td rowspan="4"><img src="./public/images/screenshot_one.png"/></td>
-    <td><img src="./public/screenshots/shop-page-screenshot.png"/></td>
+    <td rowspan="4"><img src="./public/images/screenshot_desktop.png"/></td>
+    <td><img src="./public/images/screenshot-mobile-one.png"/></td>
   </tr>
   <tr>
-    <td><img src="./public/screenshots/product-page-screenshot.png"/></td>
+    <td><img src="./public/images/screenshot-mobile-two.png"/></td>
   </tr> 
 </table>
 

@@ -78,7 +78,7 @@ const getFilteredProducts = async (query) => {
     let whereCategoriesIn = "";
     let whereBrandsIn = "";
     let productNameLike = "";   
-console.log(query)
+
     // if there is more than one category selection - query.category example: {category: [{"furniture"},{"kitchen"},...]}
     if (query.category) {      
         if (Array.isArray(query.category)) {            

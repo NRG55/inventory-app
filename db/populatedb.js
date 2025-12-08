@@ -8,7 +8,7 @@ const createProductsTable = `
     CREATE TABLE IF NOT EXISTS products (
                 id INTEGER PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
                 name VARCHAR (50) NOT NULL UNIQUE,
-                sku VARCHAR (20) NOT NULL UNIQUE,
+                sku VARCHAR (20),
                 price NUMERIC(6,2),
                 quantity INTEGER,
                 description VARCHAR (200),                

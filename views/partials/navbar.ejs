@@ -1,14 +1,15 @@
 <nav class="navbar">     
-        <ul id="mainNav" class="main-menu">              
-            <li class="nav-item">
-                <a href="/products" class="<%= path.startsWith('/products') ? 'active' : '' %>">Products</a>
-            </li>
-            <li class="nav-item">
-                <a href="/categories" class="<%= path.startsWith('/categories') ? 'active' : '' %>">Categories</a>
-            </li>
+        <ul id="mainNav" class="main-menu">
+            <% const listItems = [
+                    {name: 'Home', path: '/'},
+                    {name: 'Products', path: '/products'},
+                    {name: 'Brands', path: '/brands'},
+                    {name: 'Categories', path: '/categories'}
+                ];
+                listItems.forEach((item) => { %>
+                    <li class="nav-item">
+                        <a href="<%= item.path %>" class="<%= path === item.path ? 'active' : '' %>"><%= item.name %></a>
+                    </li> 
+            <%  }) %>           
         </ul>
-       
-        <!-- <button class="navbar-toggle-button">
-            <span>|||</span>
-        </button>    -->
 </nav>

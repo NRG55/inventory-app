@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+    <script defer src="/script/script.js"></script>
     <title>Document</title>
 </head>
 <body>
@@ -17,10 +18,10 @@
                 </a>               
             </div>
             <div class="image-container">
-                <img src="<%= product.image_src %>">
+                <img src="<%= product.image_src ? product.image_src : '/images/default-image.png' %>">
             </div>
             <div class="description">
-                <h2><%= product.name %></h2>
+                <h2><%= product.name %></h2>              
                 <h4>Qty: <%= product.quantity %></h4>
                 <h1>€<%= product.price %></h1>
                 <p><%= product.description %></p>

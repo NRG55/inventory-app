@@ -37,16 +37,21 @@ async function productsAllGet(req, res, next) {
     };   
 };
 
-async function addProductFormGet(req, res) { 
-    const categories = await getAllCategories();
-    const brands = await getAllBrands();
+async function addProductFormGet(req, res, next) {
+    try {
+        const categories = await getAllCategories();
+        const brands = await getAllBrands();
 
-    res.render("product/product_new", { 
-        title: "Add Product", 
-        categories: categories, 
-        brands: brands,
-        product: {} 
-    });
+        res.render("product/product_new", { 
+            title: "Add Product", 
+            categories: categories, 
+            brands: brands,
+            product: {} 
+        });
+
+    } catch (error) {
+        next(error);
+    };   
 };
 
 const addProductFormPost = [
@@ -64,7 +69,7 @@ const addProductFormPost = [
                     product: req.body,
                     categories: categories, 
                     brands: brands,
-                    errors: errors.array(),
+                    errors: errors.array()
                 });
             };
 
@@ -79,17 +84,22 @@ const addProductFormPost = [
     }
 ];
 
-async function editProductFormGet(req, res) {    
-    const product = await getProductById(req.params.id);
-    const categories = await getAllCategories();
-    const brands = await getAllBrands();   
+async function editProductFormGet(req, res, next) {
+    try {
+        const product = await getProductById(req.params.id);
+        const categories = await getAllCategories();
+        const brands = await getAllBrands();   
 
-    res.render("product/product_edit", { 
-        title: "Edit product information",        
-        product: product,      
-        categories: categories,      
-        brands: brands,      
-    });
+        res.render("product/product_edit", { 
+            title: "Edit product information",        
+            product: product,      
+            categories: categories,      
+            brands: brands,      
+        });
+
+    } catch (error) {
+        next(error);
+    };  
 };
 
 const editProductFormPost = [
@@ -120,22 +130,32 @@ const editProductFormPost = [
 
         } catch (error) {
             next(error);
-        }
+        };
     }
 ];
 
-async function productDetailsGet(req, res) {
+async function productDetailsGet(req, res, next) {    
     const id = req.params.id;
-    const product = await getProductById(id);   
 
-    res.render("product/product_details", { product: product });    
+    try {
+        const product = await getProductById(id);   
+
+        res.render("product/product_details", { product: product });    
+
+    } catch (error) {
+        next(error);
+    };    
 };
 
-async function deleteProductPost(req, res) {
+async function deleteProductPost(req, res, next) {
     const id = req.params.id;
+    try {
+        await deleteProductbyId(id);
+        res.redirect("/products");
 
-    await deleteProductbyId(id);
-    res.redirect("/products");
+    } catch (error) {
+        next(error);
+    };    
 };
 
 module.exports = {

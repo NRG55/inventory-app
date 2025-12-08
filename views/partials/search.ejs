@@ -17,8 +17,17 @@
         };       
         categories.forEach((category) => { %>
             <input type="hidden" name="category" value="<%= category %>" />
-        <% })} %>
-        <% if (locals.query && query.sort) { %>
+    <% })} %>
+       
+    <% if (locals.query && query.brand) { 
+        let brands = query.brand;
+        if (!Array.isArray(brands)) {
+            brands = [locals.query.brand];
+        };       
+        brands.forEach((brand) => { %>
+            <input type="hidden" name="brand" value="<%= brand %>" />
+    <% })} %>
+    <% if (locals.query && query.sort) { %>
             <input type="hidden" name="sort" value="<%= query.sort %>" />
-        <% } %>
+    <% } %>
 </form>       

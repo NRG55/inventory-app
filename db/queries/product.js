@@ -132,7 +132,7 @@ const getFilteredProducts = async (query) => {
 
     if (query.search) {
         valuesArray.push(`%${query.search}%`); 
-        console.log(valuesArray)     
+           
         if (valuesArray.length > 0) {                    
             allPlaceholdersArray.push(`$${valuesArray.length}`);
             // a category is selected so AND clause is used  

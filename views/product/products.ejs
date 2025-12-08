@@ -4,34 +4,50 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/styles.css" type="text/css"/>
+    <script defer src="/script/script.js"></script>
     <title><%= title %></title>
 </head>  
     <body>     
-        <%- include("../partials/header") %>
+        <%- include("../partials/header") %>       
         <main>
             <div class="products-container">
-                <%- include("../partials/filter") %>
-                <ul class="products-list">
-                    <a href="/products/new" class="add-product-link">ADD PRODUCT</a> 
-                    <% products.forEach((product) => { %>                   
-                        <a href="/products/<%=product.id%>">
-                            <li class="product">
-                                <div class="image-container">
-                                    <img src="<%= product.image_src %>">
-                                </div> 
-                                <div class="middle-div">
-                                    <h2><%= product.name %></h2>                                
-                                    <p><%= product.category === "none" ? "no category" : product.category %></p>
-                                    <h1>€<%= product.price %></h1>
-                                </div>                       
-                                <div class="right-div">
-                                    <h4>Qty: <%= product.quantity %></h4>
-                                    <p>SKU: <%= product.sku %></p>
-                                </div>                        
-                            </li>
-                        </a>               
-                    <% }) %>
-                </ul>
+                <input 
+                    type="image" 
+                    src="/images/filter.png"
+                    class="open-filter-button" 
+                    aria-label="Open Filter" 
+                    aria-controls="mainFilter" 
+                    aria-expanded="false" 
+                />         
+                <%- include("../partials/filter") %>              
+                <a href="/products/new" class="add-product-link">+ Add product</a> 
+                <% if (products.length === 0) { %>
+                    <div class="no-product-match">
+                        <p>No products match your search.</p>
+                    </div>                    
+                <% } else { %>
+                    <ul class="products-list">                   
+                        <% products.forEach((product) => { %>                   
+                            <a href="/products/<%=product.id%>">
+                                <li class="product">
+                                    <div class="image-container">
+                                        <img src="<%= product.image_src ? product.image_src : '/images/default-image.png' %>">
+                                    </div> 
+                                    <div class="middle-div">
+                                        <h2><%= product.name %></h2>
+                                        <p><%= product.brand %></p>                                 
+                                        <h1>€<%= product.price %></h1>
+                                    </div>                       
+                                    <div class="right-div">                                  
+                                        <h4>Qty: <%= product.quantity %></h4>
+                                        <p class="category-name"><%= product.category === "none" ? "no category" : product.category %></p>
+                                        <p>SKU: <%= product.sku %></p>                                    
+                                    </div>                        
+                                </li>
+                            </a>               
+                        <% }) %>
+                    </ul>
+                <% } %>
             </div>   
         </main>
         <%- include("../partials/footer") %>     

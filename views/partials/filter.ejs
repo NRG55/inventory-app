@@ -10,24 +10,32 @@
             value="<%= query.search %>"          
         />        
         <label for="closeFilter" class="close-filter">
-
             <input type="submit" id="closeFilter" value="x" name="filterClosed"><img src="./images/close.svg"/></input>
         </label>          
-        <h2>By categories:</h2>
-        </label>
+        <h2>By categories:</h2>      
         <div class="filter-section category-filter-section">
             <% categories.forEach((category) => { %>
                 <% if (category.name === "none") { %>
                     <div class="form-group no-category">     
                         <input type="checkbox" name="category" id="<%= category.name %>" value="<%= category.name %>" onchange="this.form.submit()"
                             <%= locals.query.category && locals.query.category.includes(category.name) ? 'checked' : '' %> />
-                        <label class="category-name" for="<%= category.name %>">no category<span><%= category.productsQuantity > 0 ? category.productsQuantity : "" %></span></label>                          
+                        <label class="no-category-name" for="<%= category.name %>">no category<span><%= category.productsQuantity > 0 ? category.productsQuantity : "" %></span></label>                          
                     </div>
                     <% return; }; %>
                 <div class="form-group">     
                     <input type="checkbox" name="category" id="<%= category.name %>" value="<%= category.name %>" onchange="this.form.submit()"
                         <%= locals.query.category && locals.query.category.includes(category.name) ? 'checked' : '' %> />
                     <label class="category-name" for="<%= category.name %>"><%= category.name %><span><%= category.productsQuantity > 0 ? category.productsQuantity : "" %></span></label>                          
+                </div>
+            <% }) %>
+        </div>
+        <h2>By brands:</h2>        
+        <div class="filter-section">
+            <% brands.forEach((brand) => { %>                           
+                <div class="form-group">     
+                    <input type="checkbox" name="brand" id="<%= brand.name %>" value="<%= brand.name %>" onchange="this.form.submit()"
+                        <%= locals.query.brand && locals.query.brand.includes(brand.name) ? 'checked' : '' %> />
+                    <label class="brand-name" for="<%= brand.name %>"><%= brand.name %><span><%= brand.productsQuantity > 0 ? brand.productsQuantity : "" %></span></label>                          
                 </div>
             <% }) %>
         </div>

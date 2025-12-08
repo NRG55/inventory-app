@@ -5,8 +5,8 @@ exports.validateCategory = [
         .trim()
         .notEmpty()
         .withMessage("Category name is required.")
-        .isLength({ max: 40 })
-        .withMessage("Category name must be between 1 and 40 characters."),
+        .isLength({ max: 20 })
+        .withMessage("Category name must be between 1 and 20 characters."),
 
     body("description")
         .optional({ checkFalsy: true })

@@ -5,7 +5,7 @@ exports.validateBrand = [
         .trim()
         .notEmpty()
         .withMessage("Brand name is required.")
-        .isLength({ max: 40 })
+        .isLength({ max: 20 })
         .withMessage("Brand name must be between 1 and 40 characters."),
 
     body("contact_details")

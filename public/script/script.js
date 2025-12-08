@@ -4,8 +4,11 @@ const openFilterButton = document.querySelector(".open-filter-button");
 const filter = document.querySelector(".filter");
 const searchForm = document.querySelector(".search-form");
 
-function toggleMenu() {
+function toggleMenu() { 
     openMenuButton.addEventListener("click", () => {
+        if (filter && filter.classList.contains("filter-active")) {
+            filter.classList.remove("filter-active");
+        };
         openMenuButton.classList.toggle("active");       
         const isActive = header.classList.toggle("menu-active");
       
@@ -18,6 +21,8 @@ function toggleMenu() {
 };
 
 function openFilter() {
+    if (!openFilterButton) return;
+
     openFilterButton.addEventListener("click", () => {
         filter.classList.add("filter-active");
         searchForm.classList.add("search-form-active");          
@@ -27,30 +32,22 @@ function openFilter() {
 
 function escapeMenu() {   
 	document.addEventListener("keydown", (e) => {     
-		if (e.key === "Escape" && (header.classList.contains("menu-active") || filter.classList.contains("filter-active"))) {		
+		if (e.key === "Escape" && (header.classList.contains("menu-active") || filter.classList.contains("filter-active"))) {
+             if (openFilterButton) {
+                filter.classList.remove("filter-active");
+                searchForm.classList.remove("search-form-active");          
+                openFilterButton.setAttribute("aria-expanded", "false");
+            };
+
             header.classList.remove("menu-active");
             openMenuButton.classList.remove("active");
-			openMenuButton.setAttribute("aria-expanded", "false");
-            filter.classList.remove("filter-active");
-            searchForm.classList.remove("search-form-active");          
-            openFilterButton.setAttribute("aria-expanded", "false");
+			openMenuButton.setAttribute("aria-expanded", "false");           
 		};
 	});
 };
 
-window.onresize = function () {
-    let w = window.outerWidth;
-    if (w > 768) {
-        header.classList.remove("menu-active");
-        openMenuButton.classList.remove("active");
-        filter.classList.remove("filter-active");
-        searchForm.classList.remove("search-form-active");          
-        openFilterButton.setAttribute("aria-expanded", "false");
-    };
-};
-
 document.addEventListener("DOMContentLoaded", () => {
 	toggleMenu();
-    openFilter();
-	escapeMenu();
+    openFilter();    
+	escapeMenu();  
 });

@@ -6,6 +6,7 @@ const indexRouter = require('./routes/indexRouter');
 const productRouter = require('./routes/productRouter');
 const brandRouter = require('./routes/brandRouter');
 const categoryRouter = require('./routes/categoryRouter');
+const setCurrentPathToLocals = require('./middlewares/setCurrentPathToLocals')
 
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -13,10 +14,7 @@ app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 
-app.use((req, res, next) => {  
-    res.locals.path = req.path;
-    next();
-});
+app.use(setCurrentPathToLocals);
 
 app.use("/", indexRouter);
 app.use("/products", productRouter);
